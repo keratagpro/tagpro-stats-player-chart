@@ -5,6 +5,7 @@
 // @namespace     http://keratagpro.github.io
 // @grant         GM_getValue
 // @grant         GM_setValue
+// @grant         GM_addStyle
 // @require       https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js
 // @require       https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.js
 // @include       http://tagpro-stats.com/profile.php?userid=*
@@ -13,6 +14,10 @@
 // ==/UserScript==
 
 // Last max value update from tagpro-stats.com: 2015-08-08
+
+GM_addStyle("\
+	#radarLegend ul { list-style: none; text-align: right; }\
+	#radarLegend li span { display: inline-block; width: 12px; height: 12px; margin-right: 5px }");
 
 var options = {
 	careerStats: true,
@@ -44,7 +49,7 @@ var $panel = $('\
 		<div class="panel-heading text-center">Summary</div>\
 		<div class="panel-body">\
 			<canvas id="radarChart"></canvas>\
-			<ul id="radarLegend" class="list-unstyled text-right" style="margin: 10px 0 0"></ul>\
+			<div id="radarLegend"></div>\
 		</div>\
 	</div>');
 
@@ -80,34 +85,30 @@ function drawChart() {
 		var stats = parseStatsFromTable($careerTable, labels);
 
 		var dataset = {
+			label: 'Career',
 			fillColor : "rgba(151,187,205,0.5)",
 			strokeColor : "rgba(151,187,205,1)",
 			pointColor : "rgba(151,187,205,1)",
 			pointStrokeColor : "#fff",
 			data : calculateValues(stats),
-			title: 'Career'
 		};
 
 		datasets.push(dataset);
-
-		$('#radarLegend').append('<li><i style="color: rgb(151,187,205)">&#9632;</i> - Career</li>');
 	}
 
 	if (options.monthlyStats) {
 		var stats = parseStatsFromTable($monthlyTable, labels);
 
 		var dataset = {
+			label: 'Monthly',
 			fillColor : "rgba(220,220,220,0.5)",
 			strokeColor : "rgba(220,220,220,1)",
 			pointColor : "rgba(220,220,220,1)",
 			pointStrokeColor : "#fff",
-			data : calculateValues(stats),
-			title: 'Monthly'
+			data : calculateValues(stats)
 		}
 
 		datasets.push(dataset);
-
-		$('#radarLegend').append('<li><i style="color: rgb(220,220,220)">&#9632;</i> - Monthly</li>');
 	}
 
 	var data = {
@@ -125,7 +126,8 @@ function drawChart() {
 		responsive: true
 	};
 
-	new Chart(ctx).Radar(data, opts);
+	var chart = new Chart(ctx).Radar(data, opts);
+	$('#radarLegend').append(chart.generateLegend());
 }
 
 drawChart();
