@@ -1,5 +1,6 @@
 // ==UserScript==
 // @name          TagPro Stats Radar Chart
+// @author        Kera
 // @version       0.2
 // @description   Radar Chart of a TagPro player's stats. 
 // @namespace     https://keratagpro.github.io
