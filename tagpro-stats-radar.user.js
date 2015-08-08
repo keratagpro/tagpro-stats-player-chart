@@ -2,9 +2,9 @@
 // @name          TagPro Stats Radar Chart
 // @version       0.2
 // @description   Radar Chart of a TagPro player's stats. 
-// @namespace     http://keratagpro.github.io
-// @downloadURL   http://keratagpro.github.io/tagpro-stats-radar/tagpro-stats-radar.user.js
-// @updateURL     http://keratagpro.github.io/tagpro-stats-radar/tagpro-stats-radar.meta.js
+// @namespace     https://keratagpro.github.io
+// @downloadURL   https://keratagpro.github.io/tagpro-stats-radar/tagpro-stats-radar.user.js
+// @updateURL     https://keratagpro.github.io/tagpro-stats-radar/tagpro-stats-radar.meta.js
 // @grant         GM_getValue
 // @grant         GM_setValue
 // @grant         GM_addStyle
