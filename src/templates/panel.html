@@ -1,0 +1,41 @@
+<div id="chartPanel" class="panel panel-default">
+	<div class="panel-heading text-center">
+		Summary
+	</div>
+	<div class="panel-body">
+		<canvas id="chart"></canvas>
+
+		<a href="#chartOptions" data-toggle="collapse" class="pull-right text-muted">
+			Settings
+		</a>
+
+		<div id="chartLegend"></div>
+	</div>
+	<div id="chartOptions" class="panel-collapse collapse">
+		<div class="panel-footer">
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" data-bind="checked: showCareerStats"> Career stats
+					</label>
+			</div>
+
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" data-bind="checked: showMonthlyStats"> Monthly stats
+				</label>
+			</div>				
+
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" data-bind="checked: customizeStats"> Select / Order stats
+				</label>
+			</div>
+
+			<div data-bind="visible: customizeStats">
+				<ul data-bind="sortable: selectedStats">
+					<li data-bind="text: $data"></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

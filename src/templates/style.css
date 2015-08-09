@@ -1,0 +1,15 @@
+#chartLegend ul {
+	list-style: none;
+	margin-left: 0;
+}
+
+#chartLegend li span {
+	display: inline-block;
+	width: 12px;
+	height: 12px;
+	margin-right: 5px
+}
+
+#chartOptions li {
+	cursor: move;
+}
