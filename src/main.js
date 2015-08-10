@@ -161,6 +161,7 @@ function drawChart() {
 	};
 
 	var opts = {
+		animation: false,
 		scaleOverlay: true,
 		scaleOverride: true,
 		scaleSteps: 4,
