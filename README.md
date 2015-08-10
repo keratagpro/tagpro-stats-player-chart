@@ -1,4 +1,4 @@
-# tagpro-stats-player-chart
+# TagPro Stats Player Chart
 
 Add a radar/bar chart to http://tagpro-stats.com profiles. Good for quickly comparing yourself against other players.
 
