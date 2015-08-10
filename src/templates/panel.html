@@ -4,7 +4,9 @@
 	</div>
 	<div class="chart-container">
 		<div class="panel-body">
-			<canvas id="chart"></canvas>
+			<div>
+				<canvas id="chart"></canvas>
+			</div>
 
 			<a href="#chartOptions" class="chart-options-toggle" data-bind="click: toggleSettings">
 				Settings
@@ -15,6 +17,7 @@
 
 		<div id="chartOptions" data-bind="css: { visible: showSettings }">
 			<a href="#" class="close" data-bind="click: toggleSettings">&times;</a>
+			<a href="#" class="reset-all" data-bind="click: resetAll">Reset All</a>
 
 			<div>
 				<label class="radio-inline">

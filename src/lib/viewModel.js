@@ -1,29 +1,30 @@
-const DEFAULT_STATS = [
-	'capgrab',
-	'capgame',
-	'grabgame',
-	'dropgame',
-	'popgame',
-	'preventgame',
-	'returngame',
-	'supportgame',
-	'taggame',
-	'holdgame'
-];
+import './knockout-persist.js';
+import { DEFAULT_OPTIONS, NON_PERSISTENT_OPTIONS } from './constants.js';
+import * as storage from './storage.js';
 
-export default function ViewModel() {
-	this.chartType = ko.observable('radar');
-	this.showSettings = ko.observable(false);
-	this.showCareerStats = ko.observable(true);
-	this.showMonthlyStats = ko.observable(true);
-	this.showBestStats = ko.observable(false);
-	this.customizeStats = ko.observable(false);
-	this.selectedStats = ko.observableArray(DEFAULT_STATS.slice(0));
+export default function ViewModel(options) {
+	ko.mapping.fromJS(options, {}, this);
+
+	var persistableKeys = Object.keys(DEFAULT_OPTIONS)
+		.filter((key) => NON_PERSISTENT_OPTIONS.indexOf(key) == -1);
+
+	persistableKeys.forEach((key) => {
+		this[key].extend({ persist: key });
+	});
+
 	this.statsMeta = {};
 	
 	this.resetStats = () => {
-		this.selectedStats(DEFAULT_STATS);
+		this.selectedStats(DEFAULT_OPTIONS.selectedStats);
 	};
+
+	this.resetAll = () => {
+		persistableKeys.forEach((key) => {
+			this[key](DEFAULT_OPTIONS[key]);
+		});
+
+		storage.deleteAll();
+	}
 
 	this.toggleSettings = () => {
 		this.showSettings(!this.showSettings());

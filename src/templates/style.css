@@ -63,6 +63,12 @@
 	right: 5px;
 }
 
+#chartOptions .reset-all {
+	position: absolute;
+	bottom: 5px;
+	right: 5px;
+}
+
 #chartOptions .chart-customize {
 	background-color: #eee;
 }

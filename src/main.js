@@ -1,16 +1,18 @@
 // Last max value update from tagpro-stats.com: 2015-08-08
 
-// import * as storage from 'lib/storage.js';
 import ViewModel from 'lib/viewModel.js';
-import { NEGATIVE_STATS, DIVISOR_LABEL_MAPPINGS } from 'lib/constants.js';
-import { statMaxValues, statMinValues } from 'lib/statLimits.js';
+import * as constants from 'lib/constants.js';
+import * as statLimits from 'lib/statLimits.js';
+import * as storage from 'lib/storage.js';
+import 'lib/knockout-sortable.js';
 
-require('lib/knockout-sortable');
 var fs = require('fs');
 
 GM_addStyle(fs.readFileSync(__dirname + '/templates/style.css', 'utf8'));
 
-var viewModel = new ViewModel();
+var options = $.extend({}, constants.DEFAULT_OPTIONS, storage.getAll());
+
+var viewModel = new ViewModel(options);
 
 var careerRowSelector = 'nav.navbar + .row > .col-lg-8 > .row';
 var monthlyRowSelector = 'nav.navbar + .row > .col-lg-8 > .row + .row';
@@ -27,11 +29,11 @@ $(sidebarSelector).prepend($panel);
 $('body').attr('data-bind', "css: { 'show-best-stats': showBestStats }");
 
 function getBestStatValue(stat) {
-	if (_.contains(NEGATIVE_STATS, stat)) {
-		return statMinValues[stat];
+	if (_.contains(constants.NEGATIVE_STATS, stat)) {
+		return statLimits.minValues[stat];
 	}
 	else {
-		return statMaxValues[stat];
+		return statLimits.maxValues[stat];
 	}
 }
 
@@ -55,7 +57,7 @@ function getStatsFromTable(table, injectInputs) {
 			viewModel.statsMeta[statname] = {
 				label: label,
 				labelDividend: dividend,
-				labelDivisor: DIVISOR_LABEL_MAPPINGS[divisor]
+				labelDivisor: constants.DIVISOR_LABEL_MAPPINGS[divisor]
 			};
 		}
 
@@ -97,11 +99,11 @@ function calculateValues(stats) {
 			val = val.value;
 		}
 
-		var max = statMaxValues[stat];
+		var max = statLimits.maxValues[stat];
 		var percentage;
 
-		if (_.contains(NEGATIVE_STATS, stat)) {
-			let min = statMinValues[stat];
+		if (_.contains(constants.NEGATIVE_STATS, stat)) {
+			let min = statLimits.minValues[stat];
 			percentage = (val - min) * 100 / (max - min);
 		}
 		else {
@@ -124,7 +126,6 @@ var ctx = document.getElementById('chart').getContext('2d');
 var chart;
 
 function drawChart() {
-
 	var datasets = [];
 
 	if (viewModel.showCareerStats()) {
@@ -174,11 +175,11 @@ function drawChart() {
 	}
 
 	switch(viewModel.chartType()) {
-		case 'radar':
-			chart = new Chart(ctx).Radar(data, opts);
-			break;
 		case 'bar':
 			chart = new Chart(ctx).Bar(data, opts);
+			break;
+		default:
+			chart = new Chart(ctx).Radar(data, opts);
 			break;
 	}
 

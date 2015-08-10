@@ -1,8 +1,13 @@
-var gulp = require('gulp');
-var fs = require('fs');
+var _ = require('lodash');
 var cheerio = require('cheerio');
-var request = require('request');
+var fs = require('fs');
+var gulp = require('gulp');
 var mustache = require('mustache');
+var Promise = require('bluebird');
+
+var readFile = Promise.promisify(fs.readFile);
+var writeFile = Promise.promisify(fs.writeFile);
+var request = Promise.promisify(require('request'));
 
 const GAMES = 100; // 0, 10, 50, 100, 200, 500, 1000
 import { NEGATIVE_STATS } from '../src/lib/constants.js';
@@ -12,22 +17,15 @@ gulp.task('update-stats', function() {
 	var statsMin = {};
 
 	function queryStatNamesAsync(body) {
-		return new Promise((resolve, reject) => {
-			request('http://tagpro-stats.com', function(err, resp, body) {
-				if (err) {
-					reject(err);
-				}
-				else {
-					var $ = cheerio.load(body);
+		return request('http://tagpro-stats.com').spread((resp, body) => {
+			var $ = cheerio.load(body);
 
-					var statNames = [];
-					$('#SelectStat option').each(function() {
-						statNames.push($(this).val());
-					});
-
-					resolve(statNames);
-				}
+			var statNames = [];
+			$('#SelectStat option').each(function() {
+				statNames.push($(this).val());
 			});
+
+			return statNames;
 		})
 	}
 
@@ -35,65 +33,45 @@ gulp.task('update-stats', function() {
 		let url = "http://tagpro-stats.com/get_table.php";
 		let query = `?range=all&stat=${stat}&game=${GAMES}&row=1&order=${order}`;
 
-		// console.log('query', query);
+		return request(`${url}${query}`).spread((resp, body) => {
+			// NOTE: For debugging
+			// console.log('query', query);
 
-		return new Promise((resolve, reject) => {
-			request(`${url}${query}`, function(err, resp, body) {
-				if (err) {
-					reject(err);
-				}
-				else {
-					let $ = cheerio.load(body);
-					var val = $('tr:nth-child(2) td:last-child').text();
-					resolve(parseFloat(val));
-				}
-			});
+			let $ = cheerio.load(body);
+			var val = $('tr:nth-child(2) td:last-child').text();
+			return parseFloat(val);
 		});
 	}
 
 	function queryStatsAsync(names, order) {
-		return new Promise((resolve, reject) => {
-			let stats = {};
-			
-			Promise.all(names.map(stat => {
-				return new Promise((resolve, reject) => {
-					queryStatAsync(stat, order)
-						.then(val => {
-							stats[stat] = val;
-							resolve(val);
-						})
-						.catch(reject);
-				});
-			}))
-				.then((_) => resolve(stats))
-				.catch(reject);
-		});
+		// NOTE: For debugging
+		// names = names.slice(0, 2);
+
+		return Promise.map(names, stat => {
+			return queryStatAsync(stat, order).then(val => [stat, val]);
+		}, { concurrency: 3 })
+			.then(_)
+			.call('zipObject')
+			.call('value')
+			.props();
 	}
 
 	function queryStatValuesAsync(maxStats) {
-		return Promise.all([
+		return Promise.join(
 			queryStatsAsync(maxStats.sort(), 'desc'),
-			queryStatsAsync(NEGATIVE_STATS.sort(), 'asc')
-		]);
+			queryStatsAsync(NEGATIVE_STATS.sort(), 'asc'),
+			(max, min) => {
+				return {
+					statMaxValues: JSON.stringify(max, null, '\t'),
+					statMinValues: JSON.stringify(min, null, '\t')
+				};
+			}
+		);
 	}
 
-	function writeStatsToFileAsync([statsMax, statsMin]) {
-		return new Promise((resolve, reject) => {
-			fs.readFile('src/templates/statLimits.js.template', function(err, data) {
-				if (err) {
-					reject(err);
-				}
-
-				var obj = {
-					statMaxValues: JSON.stringify(statsMax, null, '\t'),
-					statMinValues: JSON.stringify(statsMin, null, '\t')
-				};
-
-				var output = mustache.render(data.toString(), obj);
-
-				resolve(fs.writeFile('src/lib/statLimits.js', output, 'utf8'));
-			});
-		})
+	function writeStatsToFileAsync(stats) {
+		return readFile('src/templates/statLimits.js.template', 'utf8')
+			.then((data) => writeFile('src/lib/statLimits.js', mustache.render(data.toString(), stats), 'utf8'));
 	}
 
 	queryStatNamesAsync()
