@@ -580,7 +580,7 @@ function ViewModel(options) {
 	this.statsMeta = {};
 
 	this.resetStats = function () {
-		_this.selectedStats(_constantsJs.DEFAULT_OPTIONS.selectedStats);
+		_this.selectedStats(_constantsJs.DEFAULT_OPTIONS.selectedStats.slice(0));
 	};
 
 	this.resetAll = function () {
