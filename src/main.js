@@ -24,12 +24,23 @@ var $panel = $(fs.readFileSync(__dirname + '/templates/panel.html', 'utf8'));
 
 $(sidebarSelector).prepend($panel);
 
+$('body').attr('data-bind', "css: { 'show-best-stats': showBestStats }");
+
+function getBestStatValue(stat) {
+	if (_.contains(NEGATIVE_STATS, stat)) {
+		return statMinValues[stat];
+	}
+	else {
+		return statMaxValues[stat];
+	}
+}
+
 function getStatsFromTable(table, injectInputs) {
 	var stats = {};
 
 	table.find('td.head').each(function() {
-		var link = $(this).siblings('td.rank').find('a').attr('href');
-		var stat = link.match(/stat=([^&]+)/);
+		var $link = $(this).siblings('td.rank').find('a');
+		var stat = $link.attr('href').match(/stat=([^&]+)/);
 
 		if (!stat) {
 			return;
@@ -56,6 +67,10 @@ function getStatsFromTable(table, injectInputs) {
 		if (injectInputs) {
 			var $input = $('<input type="checkbox" class="pull-right" data-bind="visible: customizeStats, checked: selectedStats">').attr('value', statname);
 			$(this).prepend($input);
+
+			var rank = $link.text();
+			var bestStat = +getBestStatValue(statname).toFixed(2);
+			$link.html(`<span data-bind="visible: !showBestStats()">${rank}</span><span data-bind="visible: showBestStats">${bestStat}</span>`);
 		}
 	});
 

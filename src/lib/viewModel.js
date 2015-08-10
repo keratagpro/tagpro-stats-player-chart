@@ -16,6 +16,7 @@ export default function ViewModel() {
 	this.showSettings = ko.observable(false);
 	this.showCareerStats = ko.observable(true);
 	this.showMonthlyStats = ko.observable(true);
+	this.showBestStats = ko.observable(false);
 	this.customizeStats = ko.observable(false);
 	this.selectedStats = ko.observableArray(DEFAULT_STATS.slice(0));
 	this.statsMeta = {};

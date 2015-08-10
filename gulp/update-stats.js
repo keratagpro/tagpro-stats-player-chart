@@ -4,7 +4,7 @@ var cheerio = require('cheerio');
 var request = require('request');
 var mustache = require('mustache');
 
-const GAMES = 500; // 0, 10, 50, 100, 200, 500, 1000
+const GAMES = 100; // 0, 10, 50, 100, 200, 500, 1000
 import { NEGATIVE_STATS } from '../src/lib/constants.js';
 
 gulp.task('update-stats', function() {

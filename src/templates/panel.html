@@ -40,11 +40,17 @@
 				</label>
 			</div>
 
-			<div data-bind="visible: customizeStats">
+			<div class="chart-customize" data-bind="visible: customizeStats">
 				<a href="#" data-bind="click: resetStats">Reset</a>
 				<ul data-bind="sortable: selectedStats">
 					<li data-bind="text: $root.getStatLabel($data)"></li>
 				</ul>
+			</div>
+
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" data-bind="checked: showBestStats"> Replace ranks with best stats
+				</label>
 			</div>
 		</div>
 	</div>
