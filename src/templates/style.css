@@ -1,6 +1,11 @@
+#chart {
+	max-width: 100%;
+}
+
 #chartLegend ul {
 	list-style: none;
 	margin-left: 0;
+	margin-bottom: 0;
 }
 
 #chartLegend li span {
@@ -10,6 +15,60 @@
 	margin-right: 5px
 }
 
+#chartPanel .chart-container {
+	position: relative;
+	min-height: 293px;
+}
+
+#chartPanel .panel-body {
+	position: relative;
+	background-color: white;
+	z-index: 110;
+}
+
+#chartOptions {
+	background-color: white;
+	border-radius: 6px 0 0 6px;
+	border-right: none;
+	border: 1px solid #ddd;
+	height: 295px;
+	left: 0;
+	overflow: auto;
+	padding: 10px;
+	position: absolute;
+	transition: visibility 0s 1s, left 1s;
+	top: -1px;
+	width: 400px;
+	z-index: 100;
+	visibility: hidden;
+}
+
+#chartOptions.visible {
+	left: -400px;
+	transition: left 1s;
+	visibility: visible;
+}
+
 #chartOptions li {
 	cursor: move;
+}
+
+#chartOptions .close {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+}
+
+.chart-options-toggle {
+	position: absolute;
+	left: 5px;
+	top: 5px;
+	opacity: 0;
+	color: #000;
+	text-decoration: none;
+}
+
+.chart-container .panel-body:hover .chart-options-toggle {
+	opacity: 0.2;
+	text-decoration: none;
 }

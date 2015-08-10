@@ -1,13 +1,16 @@
 // Last max value update from tagpro-stats.com: 2015-08-08
 
 // import * as storage from 'lib/storage.js';
-import viewModel from 'lib/viewModel.js';
-import * as constants from 'lib/constants.js';
+import ViewModel from 'lib/viewModel.js';
+import { NEGATIVE_STATS, DIVISOR_LABEL_MAPPINGS } from 'lib/constants.js';
+import { statMaxValues, statMinValues } from 'lib/statLimits.js';
 
 require('lib/knockout-sortable');
 var fs = require('fs');
 
 GM_addStyle(fs.readFileSync(__dirname + '/templates/style.css', 'utf8'));
+
+var viewModel = new ViewModel();
 
 var careerRowSelector = 'nav.navbar + .row > .col-lg-8 > .row';
 var monthlyRowSelector = 'nav.navbar + .row > .col-lg-8 > .row + .row';
@@ -20,14 +23,6 @@ var $monthlyTable = $(monthlyRowSelector).find(tableSelector).first();
 var $panel = $(fs.readFileSync(__dirname + '/templates/panel.html', 'utf8'));
 
 $(sidebarSelector).prepend($panel);
-
-// var games = 1000;
-// var order = _.contains(constants.ascendingStats, statname) ? 'asc' : 'desc';
-
-// var url = `/get_table.php?range=all&stat=${statname}&game=${games}&row=1&order=${order} tr:nth-child(2) td:last-child`
-// $('#chartPanel .panel-body').append($(`<span>${statname} </span>`).append($('<span>').load(url)));
-
-statsMeta = {};
 
 function getStatsFromTable(table, injectInputs) {
 	var stats = {};
@@ -43,13 +38,13 @@ function getStatsFromTable(table, injectInputs) {
 		var statname = stat[1];
 		var label = $(this).text();
 
-		if (!statsMeta[statname]) {
+		if (!viewModel.statsMeta[statname]) {
 			var [dividend, divisor] = label.split('/', 2);
 
-			statsMeta[statname] = {
+			viewModel.statsMeta[statname] = {
 				label: label,
 				labelDividend: dividend,
-				labelDivisor: constants.divisorLabelMappings[divisor]
+				labelDivisor: DIVISOR_LABEL_MAPPINGS[divisor]
 			};
 		}
 
@@ -77,8 +72,8 @@ function calculateValues(stats) {
 		var val = stats[stat];
 
 		// If the statistic was not found, calculate it
-		if (!val && statsMeta[stat]) {
-			var meta = statsMeta[stat];
+		if (!val && viewModel.statsMeta[stat]) {
+			var meta = viewModel.statsMeta[stat];
 			var statDividend = _.findKey(stats, { 'label': meta.labelDividend });
 			var statDivisor = _.findKey(stats, { 'label': meta.labelDivisor });
 			val = stats[statDividend].value / stats[statDivisor].value;
@@ -87,17 +82,33 @@ function calculateValues(stats) {
 			val = val.value;
 		}
 
-		if (_.contains(constants.ascendingStats, stat)) {
-			return 0;
+		var max = statMaxValues[stat];
+		var percentage;
+
+		if (_.contains(NEGATIVE_STATS, stat)) {
+			let min = statMinValues[stat];
+			percentage = (val - min) * 100 / (max - min);
 		}
 		else {
-			return ((val / constants.statMaxValues[stat]) * 100.0).toFixed(2);
+			percentage = (val / max) * 100;
 		}
+
+		if (percentage > 100) {
+			percentage = 100;
+		}
+
+		if (percentage < 0) {
+			percentage = 0;
+		}
+
+		return percentage.toFixed(2);
 	});
 }
 
+var ctx = document.getElementById('chart').getContext('2d');
+var chart;
+
 function drawChart() {
-	var ctx = document.getElementById('chart').getContext('2d');
 
 	var datasets = [];
 
@@ -129,7 +140,7 @@ function drawChart() {
 
 	var data = {
 		labels : _.map(viewModel.selectedStats(), function(stat) {
-			return statsMeta[stat].label;
+			return viewModel.statsMeta[stat].label;
 		}),
 		datasets : datasets
 	};
@@ -142,10 +153,23 @@ function drawChart() {
 		responsive: true
 	};
 
-	var chart = new Chart(ctx).Radar(data, opts);
+	if (chart) {
+		chart.destroy();
+	}
+
+	switch(viewModel.chartType()) {
+		case 'radar':
+			chart = new Chart(ctx).Radar(data, opts);
+			break;
+		case 'bar':
+			chart = new Chart(ctx).Bar(data, opts);
+			break;
+	}
+
 	$('#chartLegend').html(chart.generateLegend());
 }
 
+viewModel.chartType.subscribe(drawChart);
 viewModel.selectedStats.subscribe(drawChart);
 viewModel.showMonthlyStats.subscribe(drawChart);
 viewModel.showCareerStats.subscribe(drawChart);

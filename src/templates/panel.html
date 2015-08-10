@@ -2,28 +2,37 @@
 	<div class="panel-heading text-center">
 		Summary
 	</div>
-	<div class="panel-body">
-		<canvas id="chart"></canvas>
+	<div class="chart-container">
+		<div class="panel-body">
+			<canvas id="chart"></canvas>
 
-		<a href="#chartOptions" data-toggle="collapse" class="pull-right text-muted">
-			Settings
-		</a>
+			<a href="#chartOptions" class="chart-options-toggle" data-bind="click: toggleSettings">
+				Settings
+			</a>
 
-		<div id="chartLegend"></div>
-	</div>
-	<div id="chartOptions" class="panel-collapse collapse">
-		<div class="panel-footer">
-			<div class="checkbox">
-				<label>
-					<input type="checkbox" data-bind="checked: showCareerStats"> Career stats
-					</label>
+			<div id="chartLegend"></div>
+		</div>
+
+		<div id="chartOptions" data-bind="css: { visible: showSettings }">
+			<a href="#" class="close" data-bind="click: toggleSettings">&times;</a>
+
+			<div>
+				<label class="radio-inline">
+					<input type="radio" value="radar" data-bind="checked: chartType"> Radar
+				</label>
+				<label class="radio-inline">
+					<input type="radio" value="bar" data-bind="checked: chartType"> Bar
+				</label>
 			</div>
 
-			<div class="checkbox">
-				<label>
+			<div>
+				<label class="checkbox-inline">
+					<input type="checkbox" data-bind="checked: showCareerStats"> Career stats
+				</label>
+				<label class="checkbox-inline">
 					<input type="checkbox" data-bind="checked: showMonthlyStats"> Monthly stats
 				</label>
-			</div>				
+			</div>
 
 			<div class="checkbox">
 				<label>
@@ -32,8 +41,9 @@
 			</div>
 
 			<div data-bind="visible: customizeStats">
+				<a href="#" data-bind="click: resetStats">Reset</a>
 				<ul data-bind="sortable: selectedStats">
-					<li data-bind="text: $data"></li>
+					<li data-bind="text: $root.getStatLabel($data)"></li>
 				</ul>
 			</div>
 		</div>
