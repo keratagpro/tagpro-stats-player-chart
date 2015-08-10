@@ -1,8 +1,14 @@
 # tagpro-stats-player-chart
 
-Install with tampermonkey from here:
+Add a radar/bar chart to http://tagpro-stats.com profiles. Good for quickly comparing yourself against other players.
 
-https://keratagpro.github.io/tagpro-stats-player-chart/tagpro-stats-player-chart.user.js
+![GitHub Logo](/images/radar-chart.png)
+
+## Install
+
+CLICK HERE: **https://keratagpro.github.io/tagpro-stats-player-chart/tagpro-stats-player-chart.user.js**
+
+(requires [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en))
 
 ## Features
 
@@ -17,10 +23,6 @@ https://keratagpro.github.io/tagpro-stats-player-chart/tagpro-stats-player-chart
 Bar chart
 
 ![GitHub Logo](/images/bar-chart.png)
-
-Radar chart
-
-![GitHub Logo](/images/radar-chart.png)
 
 Max stats instead of ranks
 
