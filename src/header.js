@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name          TagPro Stats Radar Chart
+// @name          TagPro Stats Player Chart
 // @author        Kera
-// @version       0.4.0
-// @description   Radar Chart of a TagPro player's stats. 
+// @version       0.5.0
+// @description   Radar/Bar Chart of a TagPro player's stats. 
 // @namespace     https://keratagpro.github.io
-// @downloadURL   https://keratagpro.github.io/tagpro-stats-radar/tagpro-stats-radar.user.js
-// @updateURL     https://keratagpro.github.io/tagpro-stats-radar/tagpro-stats-radar.meta.js
+// @downloadURL   https://keratagpro.github.io/tagpro-stats-player-chart/tagpro-stats-player-chart.user.js
+// @updateURL     https://keratagpro.github.io/tagpro-stats-player-chart/tagpro-stats-player-chart.meta.js
 // @grant         GM_getValue
 // @grant         GM_setValue
 // @grant         GM_addStyle

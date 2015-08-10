@@ -13,7 +13,7 @@ require('./gulp/update-stats');
 
 gulp.task('header', function() {
 	gulp.src('./src/header.js')
-		.pipe(rename('tagpro-stats-radar.meta.js'))
+		.pipe(rename('tagpro-stats-player-chart.meta.js'))
 		.pipe(gulp.dest('./dist'));
 });
 
@@ -27,7 +27,7 @@ gulp.task('js', function() {
 		.on('error', gutil.log.bind(gutil, 'Browserify Error'))
 		.pipe(source('./src/main.js'))
 		.pipe(addsrc.prepend('./src/header.js'))
-		.pipe(streamify(concat('tagpro-stats-radar.user.js')))
+		.pipe(streamify(concat('tagpro-stats-player-chart.user.js')))
 		.pipe(gulp.dest('./dist'));
 });
 
