@@ -34,7 +34,7 @@ gulp.task('build', function() {
 
 gulp.task('deploy', ['meta', 'build'], function() {
 	return gulp.src('./dist/**/*')
-		.pipe(ghPages({ push: false }));
+		.pipe(ghPages());
 });
 
 gulp.task('default', ['meta', 'build']);
