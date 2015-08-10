@@ -8,16 +8,17 @@ var addsrc = require("gulp-add-src");
 var gutil = require('gulp-util');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
+var ghPages = require('gulp-gh-pages');
 
 require('./gulp/update-stats');
 
-gulp.task('header', function() {
+gulp.task('meta', function() {
 	gulp.src('./src/header.js')
 		.pipe(rename('tagpro-stats-player-chart.meta.js'))
 		.pipe(gulp.dest('./dist'));
 });
 
-gulp.task('js', function() {
+gulp.task('build', function() {
 	var bundleStream = browserify({
 		entries: ['./src/main.js'],
 		paths: ['./src/']
@@ -31,4 +32,9 @@ gulp.task('js', function() {
 		.pipe(gulp.dest('./dist'));
 });
 
-gulp.task('default', ['header', 'js']);
+gulp.task('deploy', ['meta', 'build'], function() {
+	return gulp.src('./dist/**/*')
+		.pipe(ghPages({ push: false }));
+});
+
+gulp.task('default', ['meta', 'build']);
