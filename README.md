@@ -28,7 +28,7 @@ Bar chart
 
 ![Bar chart](/images/bar-chart.png)
 
-Selectable chart stats + ranks replaced with global max stats
+Selectable chart stats; Ranks replaced with global max stats
 
 ![Max stats](/images/max-stats.png)
 
