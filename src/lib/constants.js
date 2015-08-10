@@ -20,6 +20,8 @@ export const DEFAULT_OPTIONS = {
 	showSettings: false,
 	showCareerStats: true,
 	showMonthlyStats: true,
+	showName: true,
+	showLegend: true,
 	showBestStats: false,
 	customizeStats: false,
 	selectedStats: [

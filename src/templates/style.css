@@ -6,6 +6,10 @@
 	max-width: 100%;
 }
 
+#chartLegend {
+	height: 54px;
+}
+
 #chartLegend ul {
 	list-style: none;
 	margin-left: 0;
@@ -21,7 +25,6 @@
 
 #chartPanel .chart-container {
 	position: relative;
-	min-height: 293px;
 }
 
 #chartPanel .panel-body {
@@ -35,7 +38,7 @@
 	border-radius: 6px 0 0 6px;
 	border-right: none;
 	border: 1px solid #ddd;
-	height: 295px;
+	bottom: -1px;
 	left: 0;
 	overflow: auto;
 	padding: 10px;

@@ -167,11 +167,22 @@ function drawChart() {
 		scaleOverride: true,
 		scaleSteps: 4,
 		scaleStepWidth: 25,
+		showTooltips: false,
 		responsive: true
 	};
 
 	if (chart) {
 		chart.destroy();
+	}
+
+	if (viewModel.showName()) {
+		var name = $("h3 a[href*='profile/']").text();
+		opts.onAnimationComplete = () => {
+			ctx.fillStyle = "#666";
+			ctx.textBaseline = "top";
+			ctx.textAlign = "right";
+			ctx.fillText(name, ctx.canvas.width, 0);
+		};
 	}
 
 	switch(viewModel.chartType()) {
@@ -190,5 +201,6 @@ viewModel.chartType.subscribe(drawChart);
 viewModel.selectedStats.subscribe(drawChart);
 viewModel.showMonthlyStats.subscribe(drawChart);
 viewModel.showCareerStats.subscribe(drawChart);
+viewModel.showName.subscribe(drawChart);
 
 drawChart();
