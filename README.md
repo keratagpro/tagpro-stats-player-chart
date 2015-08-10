@@ -43,12 +43,16 @@ Settings
 
 Install dependencies:
 
-`$ npm install`
+    $ npm install
+
+Scrape minimum/maximum stats from tagpro-stats.com into `src/lib/statLimits.js`:
+
+    $ gulp update-stats
 
 Build the project into `dist/`:
 
-`$ gulp`
+    $ gulp
 
 Push the `dist/` folder into github's `gh-pages` branch:
 
-`$ gulp deploy`
+    $ gulp deploy
