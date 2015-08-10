@@ -15,7 +15,7 @@ export default function ViewModel(options) {
 	this.statsMeta = {};
 	
 	this.resetStats = () => {
-		this.selectedStats(DEFAULT_OPTIONS.selectedStats);
+		this.selectedStats(DEFAULT_OPTIONS.selectedStats.slice(0));
 	};
 
 	this.resetAll = () => {
