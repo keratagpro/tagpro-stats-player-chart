@@ -20,6 +20,10 @@ CLICK HERE: **https://keratagpro.github.io/tagpro-stats-player-chart/tagpro-stat
 
 ## Examples
 
+Default settings
+
+![Full page](/images/page.png)
+
 Bar chart
 
 ![Bar chart](/images/bar-chart.png)
