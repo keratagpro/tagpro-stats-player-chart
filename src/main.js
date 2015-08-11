@@ -142,9 +142,12 @@ function drawChart() {
 	var storedStats = viewModel.storedStats();
 	var showStoredStats = viewModel.showStoredStats();
 
-	var schemes = constants.COLOR_SCHEMES.slice(0);
-	var storedCareerColors = schemes.shift();
-	var storedMonthlyColors = schemes.shift();
+	var [
+		storedCareerColors,
+		storedMonthlyColors,
+		careerColors,
+		monthlyColors
+	] = constants.COLOR_SCHEMES;
 
 	if (showStoredStats && storedStats) {
 		if (viewModel.showCareerStats()) {
@@ -162,7 +165,6 @@ function drawChart() {
 		}
 	}
 
-	var colors = schemes.shift();
 	if (viewModel.showCareerStats()) {
 		let label = 'Career';
 
@@ -172,10 +174,9 @@ function drawChart() {
 
 		var careerValues = calculateValues(viewModel.statsCareer);
 
-		datasets.push(createDataSet(label, careerValues, colors));
+		datasets.push(createDataSet(label, careerValues, careerColors));
 	}
 
-	colors = schemes.shift();
 	if (viewModel.showMonthlyStats()) {
 		let label = 'Monthly';
 
@@ -185,7 +186,7 @@ function drawChart() {
 
 		var monthlyValues = calculateValues(viewModel.statsMonthly);
 
-		datasets.push(createDataSet(label, monthlyValues, colors));
+		datasets.push(createDataSet(label, monthlyValues, monthlyColors));
 	}
 
 	var labels = _.map(viewModel.selectedStats(), function(stat) {
@@ -210,10 +211,18 @@ function drawChart() {
 
 	if (viewModel.showName()) {
 		opts.onAnimationComplete = () => {
-			ctx.fillStyle = "#666";
+			ctx.fillStyle = careerColors.stroke;
 			ctx.textBaseline = "top";
 			ctx.textAlign = "right";
 			ctx.fillText(viewModel.name, ctx.canvas.width, 0);
+
+			if (showStoredStats && storedStats) {
+				ctx.fillStyle = "#666";
+				ctx.fillText(' vs ', ctx.canvas.width - ctx.measureText(viewModel.name).width, 0);
+
+				ctx.fillStyle = storedCareerColors.stroke;
+				ctx.fillText(storedStats.name, ctx.canvas.width - ctx.measureText(' or ' + viewModel.name).width, 0);
+			}
 		};
 	}
 

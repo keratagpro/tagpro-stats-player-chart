@@ -16,6 +16,7 @@ CLICK HERE: **https://keratagpro.github.io/tagpro-stats-player-chart/tagpro-stat
 * Toggle career and monthly stats
 * Select and reorder chart stats
 * Toggle between showing ranks and global max stats in the stat tables
+* Store stats of current profile to overlay them against other profiles
 * Changes to settings are saved automatically
 
 ## Examples

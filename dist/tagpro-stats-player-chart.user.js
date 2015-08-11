@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          TagPro Stats Player Chart
 // @author        Kera
-// @version       0.5.2
+// @version       0.5.3
 // @description   Radar/Bar Chart of a TagPro player's stats. 
 // @namespace     https://keratagpro.github.io
 // @downloadURL   https://keratagpro.github.io/tagpro-stats-player-chart/tagpro-stats-player-chart.user.js
@@ -701,7 +701,7 @@ var tableSelector = '.statstable';
 var $careerTable = $(careerRowSelector).find(tableSelector).first();
 var $monthlyTable = $(monthlyRowSelector).find(tableSelector).first();
 
-var $panel = $("<div id=\"chartPanel\" class=\"panel panel-default\">\n\t<div class=\"panel-heading text-center\">\n\t\tSummary\n\t</div>\n\t<div class=\"chart-container\">\n\t\t<div class=\"panel-body\">\n\t\t\t<div>\n\t\t\t\t<canvas id=\"chart\"></canvas>\n\t\t\t</div>\n\n\t\t\t<a href=\"#chartOptions\" class=\"chart-options-toggle\" data-bind=\"click: toggleSettings\">\n\t\t\t\tSettings\n\t\t\t</a>\n\n\t\t\t<div id=\"chartLegend\" data-bind=\"visible: showLegend\"></div>\n\t\t</div>\n\n\t\t<div id=\"chartOptions\" data-bind=\"css: { visible: showSettings }\">\n\t\t\t<a href=\"#\" class=\"close\" data-bind=\"click: toggleSettings\">&times;</a>\n\t\t\t<a href=\"#\" class=\"reset-all\" data-bind=\"click: resetAll\">Reset All</a>\n\n\t\t\t<fieldset>\n\t\t\t\t<legend>Chart type</legend>\n\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" value=\"radar\" data-bind=\"checked: chartType\"> Radar\n\t\t\t\t</label>\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" value=\"bar\" data-bind=\"checked: chartType\"> Bar\n\t\t\t\t</label>\n\t\t\t</fieldset>\n\n\t\t\t<fieldset>\n\t\t\t\t<legend>Chart elements</legend>\n\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showCareerStats\"> Career stats\n\t\t\t\t</label>\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showMonthlyStats\"> Monthly stats\n\t\t\t\t</label>\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showName\"> Name\n\t\t\t\t</label>\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showLegend\"> Legend\n\t\t\t\t</label>\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showStoredStats\"> Stored stats\n\t\t\t\t</label>\n\t\t\t</fieldset>\n\n\t\t\t<fieldset>\n\t\t\t\t<legend>Chart options</legend>\n\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: customizeStats\"> Select / Order stats\n\t\t\t\t</label>\n\n\t\t\t\t<div class=\"chart-customize\" data-bind=\"visible: customizeStats\">\n\t\t\t\t\t<a class=\"btn btn-default btn-sm pull-right\" href=\"#\" data-bind=\"click: resetStats\">Reset</a>\n\t\t\t\t\t\n\t\t\t\t\t<ul data-bind=\"sortable: selectedStats\">\n\t\t\t\t\t\t<li data-bind=\"text: $root.getStatLabel($data)\"></li>\n\t\t\t\t\t</ul>\n\t\t\t\t</div>\n\t\t\t</fieldset>\n\n\n\t\t\t<fieldset>\n\t\t\t\t<legend>Other</legend>\n\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showBestStats\"> Replace ranks with best stats\n\t\t\t\t</label>\n\t\t\t</fieldset>\n\n\t\t\t<div>\n\t\t\t\t<button class=\"btn btn-default\" data-bind=\"click: storeStats\">Store stats</button>\n\t\t\t\t<button class=\"btn btn-default\" data-bind=\"click: resetStoredStats, enable: hasStoredStats\">Remove stored stats</button>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>");
+var $panel = $("<div id=\"chartPanel\" class=\"panel panel-default\">\n\t<div class=\"panel-heading text-center\">\n\t\tSummary\n\t</div>\n\t<div class=\"chart-container\">\n\t\t<div class=\"panel-body\">\n\t\t\t<div>\n\t\t\t\t<canvas id=\"chart\"></canvas>\n\t\t\t</div>\n\n\t\t\t<a href=\"#chartOptions\" class=\"chart-options-toggle\" data-bind=\"click: toggleSettings\">\n\t\t\t\tSettings\n\t\t\t</a>\n\n\t\t\t<div id=\"chartLegend\" data-bind=\"visible: showLegend\"></div>\n\t\t</div>\n\n\t\t<div id=\"chartOptions\" data-bind=\"css: { visible: showSettings }\">\n\t\t\t<a href=\"#\" class=\"close\" data-bind=\"click: toggleSettings\">&times;</a>\n\t\t\t<a href=\"#\" class=\"reset-all\" data-bind=\"click: resetAll\">Reset All</a>\n\n\t\t\t<fieldset>\n\t\t\t\t<legend>Chart type</legend>\n\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" value=\"radar\" data-bind=\"checked: chartType\"> Radar\n\t\t\t\t</label>\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" value=\"bar\" data-bind=\"checked: chartType\"> Bar\n\t\t\t\t</label>\n\t\t\t</fieldset>\n\n\t\t\t<fieldset>\n\t\t\t\t<legend>Chart elements</legend>\n\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showCareerStats\"> Career stats\n\t\t\t\t</label>\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showMonthlyStats\"> Monthly stats\n\t\t\t\t</label>\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showName\"> Name\n\t\t\t\t</label>\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showLegend\"> Legend\n\t\t\t\t</label>\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showStoredStats\"> Stored stats\n\t\t\t\t</label>\n\t\t\t</fieldset>\n\n\t\t\t<fieldset>\n\t\t\t\t<legend>Chart options</legend>\n\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: customizeStats\"> Select / Order stats\n\t\t\t\t</label>\n\n\t\t\t\t<div class=\"chart-customize\" data-bind=\"visible: customizeStats\">\n\t\t\t\t\t<a class=\"btn btn-default btn-sm pull-right\" href=\"#\" data-bind=\"click: resetStats\">Reset</a>\n\n\t\t\t\t\t<ul data-bind=\"sortable: selectedStats\">\n\t\t\t\t\t\t<li data-bind=\"text: $root.getStatLabel($data)\"></li>\n\t\t\t\t\t</ul>\n\t\t\t\t</div>\n\n\t\t\t\t<div>\n\t\t\t\t\t<button class=\"btn btn-default\" data-bind=\"click: storeStats\">\n\t\t\t\t\t\tStore stats\n\t\t\t\t\t</button>\n\t\t\t\t\t<button class=\"btn btn-default\" data-bind=\"click: resetStoredStats, enable: hasStoredStats\">\n\t\t\t\t\t\tRemove stored stats\n\t\t\t\t\t</button>\n\t\t\t\t</div>\n\t\t\t</fieldset>\n\n\n\t\t\t<fieldset>\n\t\t\t\t<legend>Other</legend>\n\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showBestStats\"> Replace ranks with best stats\n\t\t\t\t</label>\n\t\t\t</fieldset>\n\t\t</div>\n\t</div>\n</div>");
 
 $(sidebarSelector).prepend($panel);
 
@@ -823,9 +823,12 @@ function drawChart() {
 	var storedStats = viewModel.storedStats();
 	var showStoredStats = viewModel.showStoredStats();
 
-	var schemes = constants.COLOR_SCHEMES.slice(0);
-	var storedCareerColors = schemes.shift();
-	var storedMonthlyColors = schemes.shift();
+	var _constants$COLOR_SCHEMES = _slicedToArray(constants.COLOR_SCHEMES, 4);
+
+	var storedCareerColors = _constants$COLOR_SCHEMES[0];
+	var storedMonthlyColors = _constants$COLOR_SCHEMES[1];
+	var careerColors = _constants$COLOR_SCHEMES[2];
+	var monthlyColors = _constants$COLOR_SCHEMES[3];
 
 	if (showStoredStats && storedStats) {
 		if (viewModel.showCareerStats()) {
@@ -843,7 +846,6 @@ function drawChart() {
 		}
 	}
 
-	var colors = schemes.shift();
 	if (viewModel.showCareerStats()) {
 		var _label = 'Career';
 
@@ -853,10 +855,9 @@ function drawChart() {
 
 		var careerValues = calculateValues(viewModel.statsCareer);
 
-		datasets.push(createDataSet(_label, careerValues, colors));
+		datasets.push(createDataSet(_label, careerValues, careerColors));
 	}
 
-	colors = schemes.shift();
 	if (viewModel.showMonthlyStats()) {
 		var _label2 = 'Monthly';
 
@@ -866,7 +867,7 @@ function drawChart() {
 
 		var monthlyValues = calculateValues(viewModel.statsMonthly);
 
-		datasets.push(createDataSet(_label2, monthlyValues, colors));
+		datasets.push(createDataSet(_label2, monthlyValues, monthlyColors));
 	}
 
 	var labels = _.map(viewModel.selectedStats(), function (stat) {
@@ -891,10 +892,18 @@ function drawChart() {
 
 	if (viewModel.showName()) {
 		opts.onAnimationComplete = function () {
-			ctx.fillStyle = "#666";
+			ctx.fillStyle = careerColors.stroke;
 			ctx.textBaseline = "top";
 			ctx.textAlign = "right";
 			ctx.fillText(viewModel.name, ctx.canvas.width, 0);
+
+			if (showStoredStats && storedStats) {
+				ctx.fillStyle = "#666";
+				ctx.fillText(' vs ', ctx.canvas.width - ctx.measureText(viewModel.name).width, 0);
+
+				ctx.fillStyle = storedCareerColors.stroke;
+				ctx.fillText(storedStats.name, ctx.canvas.width - ctx.measureText(' or ' + viewModel.name).width, 0);
+			}
 		};
 	}
 
