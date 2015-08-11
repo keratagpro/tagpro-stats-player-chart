@@ -1,6 +1,6 @@
 # TagPro Stats Player Chart
 
-**CLICK HERE TO INSTALL: https://keratagpro.github.io/tagpro-stats-player-chart/tagpro-stats-player-chart.user.js** (requires [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en))
+**[CLICK HERE TO INSTALL](https://keratagpro.github.io/tagpro-stats-player-chart/tagpro-stats-player-chart.user.js)** (requires [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en))
 
 Add a radar/bar chart to http://tagpro-stats.com profiles. Good for quickly comparing yourself against other players.
 
@@ -8,8 +8,8 @@ Add a radar/bar chart to http://tagpro-stats.com profiles. Good for quickly comp
 
 ## Installation
 
-1. Install Tampermonkey: https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en
-2. Open this link: https://keratagpro.github.io/tagpro-stats-player-chart/tagpro-stats-player-chart.user.js
+1. Install [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en)
+2. Open [tagpro-stats-player-chart.user.js](https://keratagpro.github.io/tagpro-stats-player-chart/tagpro-stats-player-chart.user.js)
 3. Enjoy!
 
 (requires [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en))
