@@ -19,16 +19,20 @@
 			<a href="#" class="close" data-bind="click: toggleSettings">&times;</a>
 			<a href="#" class="reset-all" data-bind="click: resetAll">Reset All</a>
 
-			<div>
+			<fieldset>
+				<legend>Chart type</legend>
+
 				<label class="radio-inline">
 					<input type="radio" value="radar" data-bind="checked: chartType"> Radar
 				</label>
 				<label class="radio-inline">
 					<input type="radio" value="bar" data-bind="checked: chartType"> Bar
 				</label>
-			</div>
+			</fieldset>
 
-			<div>
+			<fieldset>
+				<legend>Chart elements</legend>
+
 				<label class="checkbox-inline">
 					<input type="checkbox" data-bind="checked: showCareerStats"> Career stats
 				</label>
@@ -41,26 +45,44 @@
 				<label class="checkbox-inline">
 					<input type="checkbox" data-bind="checked: showLegend"> Legend
 				</label>
-			</div>
+				<label class="checkbox-inline">
+					<input type="checkbox" data-bind="checked: showStoredStats"> Stored stats
+				</label>
+			</fieldset>
 
-			<div class="checkbox">
-				<label>
+			<fieldset>
+				<legend>Chart options</legend>
+
+				<label class="checkbox-inline">
 					<input type="checkbox" data-bind="checked: customizeStats"> Select / Order stats
 				</label>
-			</div>
 
-			<div class="chart-customize" data-bind="visible: customizeStats">
-				<a href="#" data-bind="click: resetStats">Reset</a>
-				<ul data-bind="sortable: selectedStats">
-					<li data-bind="text: $root.getStatLabel($data)"></li>
-				</ul>
-			</div>
+				<div class="chart-customize" data-bind="visible: customizeStats">
+					<a class="btn btn-default btn-sm pull-right" href="#" data-bind="click: resetStats">Reset</a>
 
-			<div class="checkbox">
-				<label>
+					<ul data-bind="sortable: selectedStats">
+						<li data-bind="text: $root.getStatLabel($data)"></li>
+					</ul>
+				</div>
+
+				<div>
+					<button class="btn btn-default" data-bind="click: storeStats">
+						Store stats
+					</button>
+					<button class="btn btn-default" data-bind="click: resetStoredStats, enable: hasStoredStats">
+						Remove stored stats
+					</button>
+				</div>
+			</fieldset>
+
+
+			<fieldset>
+				<legend>Other</legend>
+
+				<label class="checkbox-inline">
 					<input type="checkbox" data-bind="checked: showBestStats"> Replace ranks with best stats
 				</label>
-			</div>
+			</fieldset>
 		</div>
 	</div>
 </div>

@@ -6,10 +6,6 @@
 	max-width: 100%;
 }
 
-#chartLegend {
-	height: 54px;
-}
-
 #chartLegend ul {
 	list-style: none;
 	margin-left: 0;
@@ -48,6 +44,11 @@
 	width: 350px;
 	z-index: 100;
 	visibility: hidden;
+}
+
+#chartOptions legend {
+	margin-bottom: 5px;
+	font-size: 15px;
 }
 
 #chartOptions.visible {

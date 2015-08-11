@@ -10,7 +10,7 @@ var fs = require('fs');
 
 GM_addStyle(fs.readFileSync(__dirname + '/templates/style.css', 'utf8'));
 
-var options = $.extend({}, constants.DEFAULT_OPTIONS, storage.getAll());
+var options = _.extend({}, constants.DEFAULT_OPTIONS, storage.getAll());
 
 var viewModel = new ViewModel(options);
 
@@ -79,8 +79,9 @@ function getStatsFromTable(table, injectInputs) {
 	return stats;
 }
 
-var userCareerStats = getStatsFromTable($careerTable, true);
-var userMonthlyStats = getStatsFromTable($monthlyTable, true);
+viewModel.name = $("h3 a[href*='profile/']").text();
+viewModel.statsCareer = getStatsFromTable($careerTable, true);
+viewModel.statsMonthly = getStatsFromTable($monthlyTable, true);
 
 ko.applyBindings(viewModel);
 
@@ -125,41 +126,73 @@ function calculateValues(stats) {
 var ctx = document.getElementById('chart').getContext('2d');
 var chart;
 
+function createDataSet(label, data, colors) {
+	return {
+		label: label,
+		fillColor: colors.fill,
+		strokeColor: colors.stroke,
+		pointColor: colors.point,
+		pointStrokeColor: colors.pointStroke || '#fff',
+		data: data
+	};
+}
+
 function drawChart() {
 	var datasets = [];
+	var storedStats = viewModel.storedStats();
+	var showStoredStats = viewModel.showStoredStats();
 
-	if (viewModel.showCareerStats()) {
-		var dataset = {
-			label: 'Career',
-			fillColor : "rgba(151,187,205,0.5)",
-			strokeColor : "rgba(151,187,205,1)",
-			pointColor : "rgba(151,187,205,1)",
-			pointStrokeColor : "#fff",
-			data : calculateValues(userCareerStats),
-		};
+	var schemes = constants.COLOR_SCHEMES.slice(0);
+	var storedCareerColors = schemes.shift();
+	var storedMonthlyColors = schemes.shift();
 
-		datasets.push(dataset);
-	}
+	if (showStoredStats && storedStats) {
+		if (viewModel.showCareerStats()) {
+			var label = `Career (${storedStats.name})`;
+			var values = calculateValues(storedStats.statsCareer);
 
-	if (viewModel.showMonthlyStats()) {
-		var dataset = {
-			label: 'Monthly',
-			fillColor : "rgba(220,220,220,0.5)",
-			strokeColor : "rgba(220,220,220,1)",
-			pointColor : "rgba(220,220,220,1)",
-			pointStrokeColor : "#fff",
-			data : calculateValues(userMonthlyStats)
+			datasets.push(createDataSet(label, values, storedCareerColors));
 		}
 
-		datasets.push(dataset);
+		if (viewModel.showMonthlyStats()) {
+			var label = `Monthly (${storedStats.name})`;
+			var values = calculateValues(storedStats.statsMonthly);
+
+			datasets.push(createDataSet(label, values, storedMonthlyColors));
+		}
 	}
 
-	var data = {
-		labels : _.map(viewModel.selectedStats(), function(stat) {
-			return viewModel.statsMeta[stat].label;
-		}),
-		datasets : datasets
-	};
+	var colors = schemes.shift();
+	if (viewModel.showCareerStats()) {
+		let label = 'Career';
+
+		if (showStoredStats && storedStats) {
+			label = `Career (${viewModel.name})`;
+		};
+
+		var careerValues = calculateValues(viewModel.statsCareer);
+
+		datasets.push(createDataSet(label, careerValues, colors));
+	}
+
+	colors = schemes.shift();
+	if (viewModel.showMonthlyStats()) {
+		let label = 'Monthly';
+
+		if (showStoredStats && storedStats) {
+			label = `Monthly (${viewModel.name})`;
+		}
+
+		var monthlyValues = calculateValues(viewModel.statsMonthly);
+
+		datasets.push(createDataSet(label, monthlyValues, colors));
+	}
+
+	var labels = _.map(viewModel.selectedStats(), function(stat) {
+		return viewModel.statsMeta[stat].label;
+	})
+
+	var data = { labels, datasets };
 
 	var opts = {
 		animation: false,
@@ -176,12 +209,11 @@ function drawChart() {
 	}
 
 	if (viewModel.showName()) {
-		var name = $("h3 a[href*='profile/']").text();
 		opts.onAnimationComplete = () => {
 			ctx.fillStyle = "#666";
 			ctx.textBaseline = "top";
 			ctx.textAlign = "right";
-			ctx.fillText(name, ctx.canvas.width, 0);
+			ctx.fillText(viewModel.name, ctx.canvas.width, 0);
 		};
 	}
 
@@ -201,6 +233,7 @@ viewModel.chartType.subscribe(drawChart);
 viewModel.selectedStats.subscribe(drawChart);
 viewModel.showMonthlyStats.subscribe(drawChart);
 viewModel.showCareerStats.subscribe(drawChart);
+viewModel.showStoredStats.subscribe(drawChart);
 viewModel.showName.subscribe(drawChart);
 
 drawChart();

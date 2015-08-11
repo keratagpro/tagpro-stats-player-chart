@@ -3,7 +3,11 @@ import { DEFAULT_OPTIONS, NON_PERSISTENT_OPTIONS } from './constants.js';
 import * as storage from './storage.js';
 
 export default function ViewModel(options) {
-	ko.mapping.fromJS(options, {}, this);
+	ko.mapping.fromJS(options, {
+		'storedStats': {
+			create: (options) => ko.observable(options.data)
+		}
+	}, this);
 
 	var persistableKeys = Object.keys(DEFAULT_OPTIONS)
 		.filter((key) => NON_PERSISTENT_OPTIONS.indexOf(key) == -1);
@@ -33,4 +37,20 @@ export default function ViewModel(options) {
 	this.getStatLabel = (stat) => {
 		return this.statsMeta[stat].label;
 	};
+
+	this.storeStats = () => {
+		this.storedStats({
+			name: this.name,
+			statsCareer: this.statsCareer,
+			statsMonthly: this.statsMonthly
+		});
+	};
+
+	this.resetStoredStats = () => {
+		this.storedStats(null);
+	};
+
+	this.hasStoredStats = ko.computed(() => {
+		return !!this.storedStats();
+	});
 };
