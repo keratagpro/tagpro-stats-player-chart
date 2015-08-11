@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          TagPro Stats Player Chart
 // @author        Kera
-// @version       0.5.1
+// @version       0.5.2
 // @description   Radar/Bar Chart of a TagPro player's stats. 
 // @namespace     https://keratagpro.github.io
 // @downloadURL   https://keratagpro.github.io/tagpro-stats-player-chart/tagpro-stats-player-chart.user.js
@@ -46,13 +46,42 @@ var DEFAULT_OPTIONS = {
 	showName: true,
 	showLegend: true,
 	showBestStats: false,
+	showStoredStats: true,
 	customizeStats: false,
+	storedStats: null,
 	selectedStats: ['capgrab', 'capgame', 'grabgame', 'dropgame', 'popgame', 'preventgame', 'returngame', 'supportgame', 'taggame', 'holdgame']
 };
 
 exports.DEFAULT_OPTIONS = DEFAULT_OPTIONS;
 var NON_PERSISTENT_OPTIONS = ['showSettings', 'customizeStats'];
+
 exports.NON_PERSISTENT_OPTIONS = NON_PERSISTENT_OPTIONS;
+var COLOR_SCHEMES = [
+// Stored stat career
+{
+	fill: 'rgba(255, 222, 184, 0.5)',
+	stroke: 'rgba(255, 222, 184, 1)',
+	point: 'rgba(255, 222, 184, 1)'
+},
+// Stored stat monthly
+{
+	fill: 'rgba(255, 237, 217, 0.5)',
+	stroke: 'rgba(255, 237, 217, 1)',
+	point: 'rgba(255, 237, 217, 1)'
+},
+// Career
+{
+	fill: 'rgba(151, 187, 205, 0.5)',
+	stroke: 'rgba(151, 187, 205, 1)',
+	point: 'rgba(151, 187, 205, 1)'
+},
+// Monthly
+{
+	fill: 'rgba(220, 220, 220, 0.5)',
+	stroke: 'rgba(220, 220, 220, 1)',
+	point: 'rgba(220, 220, 220, 1)'
+}];
+exports.COLOR_SCHEMES = COLOR_SCHEMES;
 
 },{}],2:[function(require,module,exports){
 'use strict';
@@ -569,7 +598,13 @@ var storage = _interopRequireWildcard(_storageJs);
 function ViewModel(options) {
 	var _this = this;
 
-	ko.mapping.fromJS(options, {}, this);
+	ko.mapping.fromJS(options, {
+		'storedStats': {
+			create: function create(options) {
+				return ko.observable(options.data);
+			}
+		}
+	}, this);
 
 	var persistableKeys = Object.keys(_constantsJs.DEFAULT_OPTIONS).filter(function (key) {
 		return _constantsJs.NON_PERSISTENT_OPTIONS.indexOf(key) == -1;
@@ -600,6 +635,22 @@ function ViewModel(options) {
 	this.getStatLabel = function (stat) {
 		return _this.statsMeta[stat].label;
 	};
+
+	this.storeStats = function () {
+		_this.storedStats({
+			name: _this.name,
+			statsCareer: _this.statsCareer,
+			statsMonthly: _this.statsMonthly
+		});
+	};
+
+	this.resetStoredStats = function () {
+		_this.storedStats(null);
+	};
+
+	this.hasStoredStats = ko.computed(function () {
+		return !!_this.storedStats();
+	});
 }
 
 ;
@@ -636,9 +687,9 @@ require('lib/knockout-sortable.js');
 
 
 
-GM_addStyle(".show-best-stats .rank a {\n\tfont-weight: bold;\n}\n\n#chart {\n\tmax-width: 100%;\n}\n\n#chartLegend {\n\theight: 54px;\n}\n\n#chartLegend ul {\n\tlist-style: none;\n\tmargin-left: 0;\n\tmargin-bottom: 0;\n}\n\n#chartLegend li span {\n\tdisplay: inline-block;\n\twidth: 12px;\n\theight: 12px;\n\tmargin-right: 5px\n}\n\n#chartPanel .chart-container {\n\tposition: relative;\n}\n\n#chartPanel .panel-body {\n\tposition: relative;\n\tbackground-color: white;\n\tz-index: 110;\n}\n\n#chartOptions {\n\tbackground-color: white;\n\tborder-radius: 6px 0 0 6px;\n\tborder-right: none;\n\tborder: 1px solid #ddd;\n\tbottom: -1px;\n\tleft: 0;\n\toverflow: auto;\n\tpadding: 10px;\n\tposition: absolute;\n\ttransition: visibility 0s 0.4s, left 0.4s;\n\ttop: -1px;\n\twidth: 350px;\n\tz-index: 100;\n\tvisibility: hidden;\n}\n\n#chartOptions.visible {\n\tleft: -350px;\n\ttransition: left 0.6s;\n\tvisibility: visible;\n}\n\n#chartOptions li {\n\tcursor: move;\n}\n\n#chartOptions .close {\n\tposition: absolute;\n\ttop: 5px;\n\tright: 5px;\n}\n\n#chartOptions .reset-all {\n\tposition: absolute;\n\tbottom: 5px;\n\tright: 5px;\n}\n\n#chartOptions .chart-customize {\n\tbackground-color: #eee;\n}\n\n.chart-options-toggle {\n\tposition: absolute;\n\tleft: 5px;\n\ttop: 5px;\n\topacity: 0;\n\tcolor: #000;\n\ttext-decoration: none;\n}\n\n.chart-container .panel-body:hover .chart-options-toggle {\n\topacity: 0.2;\n\ttext-decoration: none;\n}");
+GM_addStyle(".show-best-stats .rank a {\n\tfont-weight: bold;\n}\n\n#chart {\n\tmax-width: 100%;\n}\n\n#chartLegend ul {\n\tlist-style: none;\n\tmargin-left: 0;\n\tmargin-bottom: 0;\n}\n\n#chartLegend li span {\n\tdisplay: inline-block;\n\twidth: 12px;\n\theight: 12px;\n\tmargin-right: 5px\n}\n\n#chartPanel .chart-container {\n\tposition: relative;\n}\n\n#chartPanel .panel-body {\n\tposition: relative;\n\tbackground-color: white;\n\tz-index: 110;\n}\n\n#chartOptions {\n\tbackground-color: white;\n\tborder-radius: 6px 0 0 6px;\n\tborder-right: none;\n\tborder: 1px solid #ddd;\n\tbottom: -1px;\n\tleft: 0;\n\toverflow: auto;\n\tpadding: 10px;\n\tposition: absolute;\n\ttransition: visibility 0s 0.4s, left 0.4s;\n\ttop: -1px;\n\twidth: 350px;\n\tz-index: 100;\n\tvisibility: hidden;\n}\n\n#chartOptions legend {\n\tmargin-bottom: 5px;\n\tfont-size: 15px;\n}\n\n#chartOptions.visible {\n\tleft: -350px;\n\ttransition: left 0.6s;\n\tvisibility: visible;\n}\n\n#chartOptions li {\n\tcursor: move;\n}\n\n#chartOptions .close {\n\tposition: absolute;\n\ttop: 5px;\n\tright: 5px;\n}\n\n#chartOptions .reset-all {\n\tposition: absolute;\n\tbottom: 5px;\n\tright: 5px;\n}\n\n#chartOptions .chart-customize {\n\tbackground-color: #eee;\n}\n\n.chart-options-toggle {\n\tposition: absolute;\n\tleft: 5px;\n\ttop: 5px;\n\topacity: 0;\n\tcolor: #000;\n\ttext-decoration: none;\n}\n\n.chart-container .panel-body:hover .chart-options-toggle {\n\topacity: 0.2;\n\ttext-decoration: none;\n}");
 
-var options = $.extend({}, constants.DEFAULT_OPTIONS, storage.getAll());
+var options = _.extend({}, constants.DEFAULT_OPTIONS, storage.getAll());
 
 var viewModel = new _libViewModelJs2['default'](options);
 
@@ -650,7 +701,7 @@ var tableSelector = '.statstable';
 var $careerTable = $(careerRowSelector).find(tableSelector).first();
 var $monthlyTable = $(monthlyRowSelector).find(tableSelector).first();
 
-var $panel = $("<div id=\"chartPanel\" class=\"panel panel-default\">\n\t<div class=\"panel-heading text-center\">\n\t\tSummary\n\t</div>\n\t<div class=\"chart-container\">\n\t\t<div class=\"panel-body\">\n\t\t\t<div>\n\t\t\t\t<canvas id=\"chart\"></canvas>\n\t\t\t</div>\n\n\t\t\t<a href=\"#chartOptions\" class=\"chart-options-toggle\" data-bind=\"click: toggleSettings\">\n\t\t\t\tSettings\n\t\t\t</a>\n\n\t\t\t<div id=\"chartLegend\" data-bind=\"visible: showLegend\"></div>\n\t\t</div>\n\n\t\t<div id=\"chartOptions\" data-bind=\"css: { visible: showSettings }\">\n\t\t\t<a href=\"#\" class=\"close\" data-bind=\"click: toggleSettings\">&times;</a>\n\t\t\t<a href=\"#\" class=\"reset-all\" data-bind=\"click: resetAll\">Reset All</a>\n\n\t\t\t<div>\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" value=\"radar\" data-bind=\"checked: chartType\"> Radar\n\t\t\t\t</label>\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" value=\"bar\" data-bind=\"checked: chartType\"> Bar\n\t\t\t\t</label>\n\t\t\t</div>\n\n\t\t\t<div>\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showCareerStats\"> Career stats\n\t\t\t\t</label>\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showMonthlyStats\"> Monthly stats\n\t\t\t\t</label>\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showName\"> Name\n\t\t\t\t</label>\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showLegend\"> Legend\n\t\t\t\t</label>\n\t\t\t</div>\n\n\t\t\t<div class=\"checkbox\">\n\t\t\t\t<label>\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: customizeStats\"> Select / Order stats\n\t\t\t\t</label>\n\t\t\t</div>\n\n\t\t\t<div class=\"chart-customize\" data-bind=\"visible: customizeStats\">\n\t\t\t\t<a href=\"#\" data-bind=\"click: resetStats\">Reset</a>\n\t\t\t\t<ul data-bind=\"sortable: selectedStats\">\n\t\t\t\t\t<li data-bind=\"text: $root.getStatLabel($data)\"></li>\n\t\t\t\t</ul>\n\t\t\t</div>\n\n\t\t\t<div class=\"checkbox\">\n\t\t\t\t<label>\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showBestStats\"> Replace ranks with best stats\n\t\t\t\t</label>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>");
+var $panel = $("<div id=\"chartPanel\" class=\"panel panel-default\">\n\t<div class=\"panel-heading text-center\">\n\t\tSummary\n\t</div>\n\t<div class=\"chart-container\">\n\t\t<div class=\"panel-body\">\n\t\t\t<div>\n\t\t\t\t<canvas id=\"chart\"></canvas>\n\t\t\t</div>\n\n\t\t\t<a href=\"#chartOptions\" class=\"chart-options-toggle\" data-bind=\"click: toggleSettings\">\n\t\t\t\tSettings\n\t\t\t</a>\n\n\t\t\t<div id=\"chartLegend\" data-bind=\"visible: showLegend\"></div>\n\t\t</div>\n\n\t\t<div id=\"chartOptions\" data-bind=\"css: { visible: showSettings }\">\n\t\t\t<a href=\"#\" class=\"close\" data-bind=\"click: toggleSettings\">&times;</a>\n\t\t\t<a href=\"#\" class=\"reset-all\" data-bind=\"click: resetAll\">Reset All</a>\n\n\t\t\t<fieldset>\n\t\t\t\t<legend>Chart type</legend>\n\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" value=\"radar\" data-bind=\"checked: chartType\"> Radar\n\t\t\t\t</label>\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" value=\"bar\" data-bind=\"checked: chartType\"> Bar\n\t\t\t\t</label>\n\t\t\t</fieldset>\n\n\t\t\t<fieldset>\n\t\t\t\t<legend>Chart elements</legend>\n\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showCareerStats\"> Career stats\n\t\t\t\t</label>\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showMonthlyStats\"> Monthly stats\n\t\t\t\t</label>\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showName\"> Name\n\t\t\t\t</label>\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showLegend\"> Legend\n\t\t\t\t</label>\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showStoredStats\"> Stored stats\n\t\t\t\t</label>\n\t\t\t</fieldset>\n\n\t\t\t<fieldset>\n\t\t\t\t<legend>Chart options</legend>\n\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: customizeStats\"> Select / Order stats\n\t\t\t\t</label>\n\n\t\t\t\t<div class=\"chart-customize\" data-bind=\"visible: customizeStats\">\n\t\t\t\t\t<a class=\"btn btn-default btn-sm pull-right\" href=\"#\" data-bind=\"click: resetStats\">Reset</a>\n\t\t\t\t\t\n\t\t\t\t\t<ul data-bind=\"sortable: selectedStats\">\n\t\t\t\t\t\t<li data-bind=\"text: $root.getStatLabel($data)\"></li>\n\t\t\t\t\t</ul>\n\t\t\t\t</div>\n\t\t\t</fieldset>\n\n\n\t\t\t<fieldset>\n\t\t\t\t<legend>Other</legend>\n\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showBestStats\"> Replace ranks with best stats\n\t\t\t\t</label>\n\t\t\t</fieldset>\n\n\t\t\t<div>\n\t\t\t\t<button class=\"btn btn-default\" data-bind=\"click: storeStats\">Store stats</button>\n\t\t\t\t<button class=\"btn btn-default\" data-bind=\"click: resetStoredStats, enable: hasStoredStats\">Remove stored stats</button>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>");
 
 $(sidebarSelector).prepend($panel);
 
@@ -711,8 +762,9 @@ function getStatsFromTable(table, injectInputs) {
 	return stats;
 }
 
-var userCareerStats = getStatsFromTable($careerTable, true);
-var userMonthlyStats = getStatsFromTable($monthlyTable, true);
+viewModel.name = $("h3 a[href*='profile/']").text();
+viewModel.statsCareer = getStatsFromTable($careerTable, true);
+viewModel.statsMonthly = getStatsFromTable($monthlyTable, true);
 
 ko.applyBindings(viewModel);
 
@@ -755,41 +807,73 @@ function calculateValues(stats) {
 var ctx = document.getElementById('chart').getContext('2d');
 var chart;
 
+function createDataSet(label, data, colors) {
+	return {
+		label: label,
+		fillColor: colors.fill,
+		strokeColor: colors.stroke,
+		pointColor: colors.point,
+		pointStrokeColor: colors.pointStroke || '#fff',
+		data: data
+	};
+}
+
 function drawChart() {
 	var datasets = [];
+	var storedStats = viewModel.storedStats();
+	var showStoredStats = viewModel.showStoredStats();
 
+	var schemes = constants.COLOR_SCHEMES.slice(0);
+	var storedCareerColors = schemes.shift();
+	var storedMonthlyColors = schemes.shift();
+
+	if (showStoredStats && storedStats) {
+		if (viewModel.showCareerStats()) {
+			var label = 'Career (' + storedStats.name + ')';
+			var values = calculateValues(storedStats.statsCareer);
+
+			datasets.push(createDataSet(label, values, storedCareerColors));
+		}
+
+		if (viewModel.showMonthlyStats()) {
+			var label = 'Monthly (' + storedStats.name + ')';
+			var values = calculateValues(storedStats.statsMonthly);
+
+			datasets.push(createDataSet(label, values, storedMonthlyColors));
+		}
+	}
+
+	var colors = schemes.shift();
 	if (viewModel.showCareerStats()) {
-		var dataset = {
-			label: 'Career',
-			fillColor: "rgba(151,187,205,0.5)",
-			strokeColor: "rgba(151,187,205,1)",
-			pointColor: "rgba(151,187,205,1)",
-			pointStrokeColor: "#fff",
-			data: calculateValues(userCareerStats)
+		var _label = 'Career';
+
+		if (showStoredStats && storedStats) {
+			_label = 'Career (' + viewModel.name + ')';
 		};
 
-		datasets.push(dataset);
+		var careerValues = calculateValues(viewModel.statsCareer);
+
+		datasets.push(createDataSet(_label, careerValues, colors));
 	}
 
+	colors = schemes.shift();
 	if (viewModel.showMonthlyStats()) {
-		var dataset = {
-			label: 'Monthly',
-			fillColor: "rgba(220,220,220,0.5)",
-			strokeColor: "rgba(220,220,220,1)",
-			pointColor: "rgba(220,220,220,1)",
-			pointStrokeColor: "#fff",
-			data: calculateValues(userMonthlyStats)
-		};
+		var _label2 = 'Monthly';
 
-		datasets.push(dataset);
+		if (showStoredStats && storedStats) {
+			_label2 = 'Monthly (' + viewModel.name + ')';
+		}
+
+		var monthlyValues = calculateValues(viewModel.statsMonthly);
+
+		datasets.push(createDataSet(_label2, monthlyValues, colors));
 	}
 
-	var data = {
-		labels: _.map(viewModel.selectedStats(), function (stat) {
-			return viewModel.statsMeta[stat].label;
-		}),
-		datasets: datasets
-	};
+	var labels = _.map(viewModel.selectedStats(), function (stat) {
+		return viewModel.statsMeta[stat].label;
+	});
+
+	var data = { labels: labels, datasets: datasets };
 
 	var opts = {
 		animation: false,
@@ -806,12 +890,11 @@ function drawChart() {
 	}
 
 	if (viewModel.showName()) {
-		var name = $("h3 a[href*='profile/']").text();
 		opts.onAnimationComplete = function () {
 			ctx.fillStyle = "#666";
 			ctx.textBaseline = "top";
 			ctx.textAlign = "right";
-			ctx.fillText(name, ctx.canvas.width, 0);
+			ctx.fillText(viewModel.name, ctx.canvas.width, 0);
 		};
 	}
 
@@ -831,6 +914,7 @@ viewModel.chartType.subscribe(drawChart);
 viewModel.selectedStats.subscribe(drawChart);
 viewModel.showMonthlyStats.subscribe(drawChart);
 viewModel.showCareerStats.subscribe(drawChart);
+viewModel.showStoredStats.subscribe(drawChart);
 viewModel.showName.subscribe(drawChart);
 
 drawChart();
