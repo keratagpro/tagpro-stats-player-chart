@@ -12,8 +12,6 @@ Add a radar/bar chart to http://tagpro-stats.com profiles. Good for quickly comp
 2. Open [tagpro-stats-player-chart.user.js](https://keratagpro.github.io/tagpro-stats-player-chart/tagpro-stats-player-chart.user.js)
 3. Enjoy!
 
-(requires [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en))
-
 ## Features
 
 * Select between radar and bar chart
