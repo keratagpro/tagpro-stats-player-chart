@@ -29,6 +29,10 @@ Bar chart
 
 ![Bar chart](/images/bar-chart.png)
 
+Radar chart comparing two players
+
+![Radar chart comparison](/images/career-comparison.png)
+
 Selectable chart stats; Ranks replaced with global max stats
 
 ![Max stats](/images/max-stats.png)
