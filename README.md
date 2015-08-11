@@ -43,6 +43,10 @@ Settings
 
 ![Settings](/images/settings.png?raw=true)
 
+Bar chart comparing custom monthly and career stats of two players
+
+![Custom stats](/images/custom-stats.png?raw=true)
+
 ## Notes
 
 * Stats where smaller is better: drops, drops/game, drops/hour, popped, pops/game, pops/hour, disconnects
