@@ -2,7 +2,7 @@
 
 Add a radar/bar chart to http://tagpro-stats.com profiles. Good for quickly comparing yourself against other players.
 
-![Full page](/images/page.png)
+![Full page](/images/page.png?raw=true)
 
 ## Install
 
@@ -23,11 +23,11 @@ CLICK HERE: **https://keratagpro.github.io/tagpro-stats-player-chart/tagpro-stat
 
 Radar chart
 
-![Radar chart](/images/radar-chart.png)
+![Radar chart](/images/radar-chart.png?raw=true)
 
 Bar chart
 
-![Bar chart](/images/bar-chart.png)
+![Bar chart](/images/bar-chart.png?raw=true)
 
 Radar chart comparing two players
 
@@ -35,11 +35,11 @@ Radar chart comparing two players
 
 Selectable chart stats; Ranks replaced with global max stats
 
-![Max stats](/images/max-stats.png)
+![Max stats](/images/max-stats.png?raw=true)
 
 Settings
 
-![Settings](/images/settings.png)
+![Settings](/images/settings.png?raw=true)
 
 ## Notes
 
