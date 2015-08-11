@@ -1,9 +1,9 @@
-var _ = require('lodash');
-var cheerio = require('cheerio');
-var fs = require('fs');
-var gulp = require('gulp');
-var mustache = require('mustache');
-var Promise = require('bluebird');
+import _ from 'lodash';
+import cheerio from 'cheerio';
+import fs from 'fs';
+import gulp from 'gulp';
+import mustache from 'mustache';
+import Promise from 'bluebird';
 
 var readFile = Promise.promisify(fs.readFile);
 var writeFile = Promise.promisify(fs.writeFile);
@@ -12,7 +12,7 @@ var request = Promise.promisify(require('request'));
 const GAMES = 100; // 0, 10, 50, 100, 200, 500, 1000
 import { NEGATIVE_STATS } from '../src/lib/constants.js';
 
-gulp.task('update-stats', function() {
+gulp.task('update-stats', () => {
 	var statsMax = {};
 	var statsMin = {};
 
@@ -70,7 +70,7 @@ gulp.task('update-stats', function() {
 	}
 
 	function writeStatsToFileAsync(stats) {
-		return readFile('src/templates/statLimits.js.template', 'utf8')
+		return readFile('src/templates/statLimits.js.mustache', 'utf8')
 			.then((data) => writeFile('src/lib/statLimits.js', mustache.render(data.toString(), stats), 'utf8'));
 	}
 

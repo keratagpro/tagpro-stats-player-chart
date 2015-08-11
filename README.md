@@ -58,9 +58,14 @@ Scrape minimum/maximum stats from tagpro-stats.com into `src/lib/statLimits.js`:
 
     $ gulp update-stats
 
+Bump project version:
+
+	$ gulp bump
+
 Build the project into `dist/`:
 
     $ gulp
+    (same as running 'gulp meta' and 'gulp build')
 
 Push the `dist/` folder into github's `gh-pages` branch:
 
