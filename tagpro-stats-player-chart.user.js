@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          TagPro Stats Player Chart
 // @author        Kera
-// @version       0.5.3
+// @version       0.5.4
 // @description   Radar/Bar Chart of a TagPro player's stats. 
 // @namespace     https://keratagpro.github.io
 // @downloadURL   https://keratagpro.github.io/tagpro-stats-player-chart/tagpro-stats-player-chart.user.js
@@ -481,68 +481,70 @@ ko.bindingHandlers.draggable = {
 };
 
 },{}],4:[function(require,module,exports){
+// Updated at 2015-08-13T07:20:03.594Z
+
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 var maxValues = {
-	"capgame": 2.0388,
-	"capgrab": 0.5556,
-	"caphour": 39.71223130568446,
-	"captures": 20588,
-	"dcs": 760,
-	"dropgame": 6.7652,
-	"drophour": 86.11078776765751,
-	"drops": 95366,
-	"games": 23694,
+	"capgame": 1.5757,
+	"capgrab": 0.3297,
+	"caphour": 23.283855560796813,
+	"captures": 20607,
+	"dcs": 768,
+	"dropgame": 6.6889,
+	"drophour": 82.83603598147948,
+	"drops": 95520,
+	"games": 23720,
 	"grabgame": 7.8214,
-	"grabhour": 96.96265685871359,
-	"grabs": 116099,
-	"hold": 1316627,
-	"holdgame": 108.4094,
+	"grabhour": 96.4926369451228,
+	"grabs": 116272,
+	"hold": 1318362,
+	"holdgame": 86.5639,
 	"holdgrab": 25.8036,
-	"holdhour": 1510.0183486238532,
-	"hourgame": 5.562771506931471,
-	"hours": 1833.45,
+	"holdhour": 1243.3779230995917,
+	"hourgame": 5.3658222573392935,
+	"hours": 1835.8,
 	"keptflags": 145,
-	"losses": 8358,
-	"nrtags": 40963,
-	"nrtagsgame": 4.2178,
-	"nrtagshour": 61.334185369842935,
+	"losses": 8412,
+	"nrtags": 41011,
+	"nrtagsgame": 3.6741,
+	"nrtagshour": 51.18286918598969,
 	"pointgame": 0,
 	"pointhour": 0,
 	"points": 0,
-	"popgame": 9.4882,
-	"pophour": 134.98221639381106,
-	"popped": 139467,
-	"prevent": 810766,
-	"preventgame": 74.4694,
-	"preventhour": 1118.7595789018008,
-	"returngame": 11.4059,
-	"returnhour": 139.5907457206445,
-	"returns": 93909,
-	"support": 218549,
-	"supportgame": 27.1683,
-	"supporthour": 395.0727808799272,
-	"taggame": 12.3366,
-	"taghour": 147.1187520383988,
-	"tagpop": 17.9231,
-	"tags": 120275,
-	"winpercent": 95.0495,
-	"winpercentnodcs": 0.9507,
-	"wins": 15227
+	"popgame": 8.9547,
+	"pophour": 120.96638327037005,
+	"popped": 139656,
+	"prevent": 810946,
+	"preventgame": 63.9008,
+	"preventhour": 827.6333292013828,
+	"returngame": 9.3317,
+	"returnhour": 114.28046675324903,
+	"returns": 93955,
+	"support": 219022,
+	"supportgame": 16.322,
+	"supporthour": 212.01018044327952,
+	"taggame": 10.2178,
+	"taghour": 125.13227855178579,
+	"tagpop": 10.4986,
+	"tags": 120432,
+	"winpercent": 84.7761,
+	"winpercentnodcs": 0.852,
+	"wins": 15242
 };
 
 exports.maxValues = maxValues;
 var minValues = {
 	"dcs": 0,
-	"dropgame": 0.0367,
-	"drophour": 0.43331726504676576,
-	"drops": 4,
-	"popgame": 0.5963,
-	"pophour": 7.041405557009943,
-	"popped": 65
+	"dropgame": 0.1621,
+	"drophour": 2.196966724359289,
+	"drops": 305,
+	"popgame": 0.7772,
+	"pophour": 10.531033937748463,
+	"popped": 1462
 };
 exports.minValues = minValues;
 
@@ -687,7 +689,7 @@ require('lib/knockout-sortable.js');
 
 
 
-GM_addStyle(".show-best-stats .rank a {\n\tfont-weight: bold;\n}\n\n#chart {\n\tmax-width: 100%;\n}\n\n#chartLegend ul {\n\tlist-style: none;\n\tmargin-left: 0;\n\tmargin-bottom: 0;\n}\n\n#chartLegend li span {\n\tdisplay: inline-block;\n\twidth: 12px;\n\theight: 12px;\n\tmargin-right: 5px\n}\n\n#chartPanel .chart-container {\n\tposition: relative;\n}\n\n#chartPanel .panel-body {\n\tposition: relative;\n\tbackground-color: white;\n\tz-index: 110;\n}\n\n#chartOptions {\n\tbackground-color: white;\n\tborder-radius: 6px 0 0 6px;\n\tborder-right: none;\n\tborder: 1px solid #ddd;\n\tbottom: -1px;\n\tleft: 0;\n\toverflow: auto;\n\tpadding: 10px;\n\tposition: absolute;\n\ttransition: visibility 0s 0.4s, left 0.4s;\n\ttop: -1px;\n\twidth: 350px;\n\tz-index: 100;\n\tvisibility: hidden;\n}\n\n#chartOptions legend {\n\tmargin-bottom: 5px;\n\tfont-size: 15px;\n}\n\n#chartOptions.visible {\n\tleft: -350px;\n\ttransition: left 0.6s;\n\tvisibility: visible;\n}\n\n#chartOptions li {\n\tcursor: move;\n}\n\n#chartOptions .close {\n\tposition: absolute;\n\ttop: 5px;\n\tright: 5px;\n}\n\n#chartOptions .reset-all {\n\tposition: absolute;\n\tbottom: 5px;\n\tright: 5px;\n}\n\n#chartOptions .chart-customize {\n\tbackground-color: #eee;\n}\n\n.chart-options-toggle {\n\tposition: absolute;\n\tleft: 5px;\n\ttop: 5px;\n\topacity: 0;\n\tcolor: #000;\n\ttext-decoration: none;\n}\n\n.chart-container .panel-body:hover .chart-options-toggle {\n\topacity: 0.2;\n\ttext-decoration: none;\n}");
+GM_addStyle(".show-best-stats .rank a {\n\tfont-weight: bold;\n}\n\n#chart {\n\tmax-width: 100%;\n}\n\n#chartLegend ul {\n\tlist-style: none;\n\tmargin-left: 0;\n\tmargin-bottom: 0;\n}\n\n#chartLegend li span {\n\tdisplay: inline-block;\n\twidth: 12px;\n\theight: 12px;\n\tmargin-right: 5px\n}\n\n#chartPanel .chart-container {\n\tposition: relative;\n}\n\n#chartPanel .panel-body {\n\tposition: relative;\n\tbackground-color: white;\n\tz-index: 110;\n}\n\n#chartOptions {\n\tbackground-color: white;\n\tborder-radius: 6px 0 0 6px;\n\tborder-right: none;\n\tborder: 1px solid #ddd;\n\tbottom: -1px;\n\tleft: 0;\n\toverflow: auto;\n\tpadding: 10px;\n\tposition: absolute;\n\ttransition: visibility 0s 0.4s, left 0.4s;\n\ttop: -1px;\n\twidth: 350px;\n\tz-index: 100;\n\tvisibility: hidden;\n}\n\n#chartOptions legend {\n\tmargin-bottom: 5px;\n\tfont-size: 15px;\n}\n\n#chartOptions.visible {\n\tleft: -350px;\n\ttransition: left 0.6s;\n\tvisibility: visible;\n\tbox-shadow: 0 0 5px 0 #ccc;\n}\n\n#chartOptions li {\n\tcursor: move;\n}\n\n#chartOptions .close {\n\tposition: absolute;\n\ttop: 5px;\n\tright: 5px;\n}\n\n#chartOptions .chart-customize {\n\tbackground-color: #eee;\n}\n\n.chart-options-toggle {\n\tposition: absolute;\n\tleft: 5px;\n\ttop: 5px;\n\topacity: 0;\n\tcolor: #000;\n\ttext-decoration: none;\n}\n\n.chart-container .panel-body:hover .chart-options-toggle {\n\topacity: 0.2;\n\ttext-decoration: none;\n}");
 
 var options = _.extend({}, constants.DEFAULT_OPTIONS, storage.getAll());
 
@@ -701,7 +703,7 @@ var tableSelector = '.statstable';
 var $careerTable = $(careerRowSelector).find(tableSelector).first();
 var $monthlyTable = $(monthlyRowSelector).find(tableSelector).first();
 
-var $panel = $("<div id=\"chartPanel\" class=\"panel panel-default\">\n\t<div class=\"panel-heading text-center\">\n\t\tSummary\n\t</div>\n\t<div class=\"chart-container\">\n\t\t<div class=\"panel-body\">\n\t\t\t<div>\n\t\t\t\t<canvas id=\"chart\"></canvas>\n\t\t\t</div>\n\n\t\t\t<a href=\"#chartOptions\" class=\"chart-options-toggle\" data-bind=\"click: toggleSettings\">\n\t\t\t\tSettings\n\t\t\t</a>\n\n\t\t\t<div id=\"chartLegend\" data-bind=\"visible: showLegend\"></div>\n\t\t</div>\n\n\t\t<div id=\"chartOptions\" data-bind=\"css: { visible: showSettings }\">\n\t\t\t<a href=\"#\" class=\"close\" data-bind=\"click: toggleSettings\">&times;</a>\n\t\t\t<a href=\"#\" class=\"reset-all\" data-bind=\"click: resetAll\">Reset All</a>\n\n\t\t\t<fieldset>\n\t\t\t\t<legend>Chart type</legend>\n\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" value=\"radar\" data-bind=\"checked: chartType\"> Radar\n\t\t\t\t</label>\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" value=\"bar\" data-bind=\"checked: chartType\"> Bar\n\t\t\t\t</label>\n\t\t\t</fieldset>\n\n\t\t\t<fieldset>\n\t\t\t\t<legend>Chart elements</legend>\n\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showCareerStats\"> Career stats\n\t\t\t\t</label>\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showMonthlyStats\"> Monthly stats\n\t\t\t\t</label>\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showName\"> Name\n\t\t\t\t</label>\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showLegend\"> Legend\n\t\t\t\t</label>\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showStoredStats\"> Stored stats\n\t\t\t\t</label>\n\t\t\t</fieldset>\n\n\t\t\t<fieldset>\n\t\t\t\t<legend>Chart options</legend>\n\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: customizeStats\"> Select / Order stats\n\t\t\t\t</label>\n\n\t\t\t\t<div class=\"chart-customize\" data-bind=\"visible: customizeStats\">\n\t\t\t\t\t<a class=\"btn btn-default btn-sm pull-right\" href=\"#\" data-bind=\"click: resetStats\">Reset</a>\n\n\t\t\t\t\t<ul data-bind=\"sortable: selectedStats\">\n\t\t\t\t\t\t<li data-bind=\"text: $root.getStatLabel($data)\"></li>\n\t\t\t\t\t</ul>\n\t\t\t\t</div>\n\n\t\t\t\t<div>\n\t\t\t\t\t<button class=\"btn btn-default\" data-bind=\"click: storeStats\">\n\t\t\t\t\t\tStore stats\n\t\t\t\t\t</button>\n\t\t\t\t\t<button class=\"btn btn-default\" data-bind=\"click: resetStoredStats, enable: hasStoredStats\">\n\t\t\t\t\t\tRemove stored stats\n\t\t\t\t\t</button>\n\t\t\t\t</div>\n\t\t\t</fieldset>\n\n\n\t\t\t<fieldset>\n\t\t\t\t<legend>Other</legend>\n\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showBestStats\"> Replace ranks with best stats\n\t\t\t\t</label>\n\t\t\t</fieldset>\n\t\t</div>\n\t</div>\n</div>");
+var $panel = $("<div id=\"chartPanel\" class=\"panel panel-default\">\n\t<div class=\"panel-heading text-center\">\n\t\tSummary\n\t</div>\n\t<div class=\"chart-container\">\n\t\t<div class=\"panel-body\">\n\t\t\t<div>\n\t\t\t\t<canvas id=\"chart\"></canvas>\n\t\t\t</div>\n\n\t\t\t<a href=\"#chartOptions\" class=\"chart-options-toggle\" data-bind=\"click: toggleSettings\">\n\t\t\t\tSettings\n\t\t\t</a>\n\n\t\t\t<div id=\"chartLegend\" data-bind=\"visible: showLegend\"></div>\n\t\t</div>\n\n\t\t<div id=\"chartOptions\" data-bind=\"css: { visible: showSettings }\">\n\t\t\t<a href=\"#\" class=\"close\" data-bind=\"click: toggleSettings\">&times;</a>\n\n\t\t\t<fieldset>\n\t\t\t\t<legend>Chart type</legend>\n\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" value=\"radar\" data-bind=\"checked: chartType\"> Radar\n\t\t\t\t</label>\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" value=\"bar\" data-bind=\"checked: chartType\"> Bar\n\t\t\t\t</label>\n\t\t\t</fieldset>\n\n\t\t\t<fieldset>\n\t\t\t\t<legend>Chart elements</legend>\n\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showCareerStats\"> Career stats\n\t\t\t\t</label>\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showMonthlyStats\"> Monthly stats\n\t\t\t\t</label>\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showName\"> Name\n\t\t\t\t</label>\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showLegend\"> Legend\n\t\t\t\t</label>\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showStoredStats\"> Stored stats\n\t\t\t\t</label>\n\t\t\t</fieldset>\n\n\t\t\t<fieldset>\n\t\t\t\t<legend>Chart options</legend>\n\n\t\t\t\t<label class=\"checkbox-inline\">\n\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: customizeStats\"> Select / Order stats\n\t\t\t\t</label>\n\n\t\t\t\t<div class=\"chart-customize\" data-bind=\"visible: customizeStats\">\n\t\t\t\t\t<a class=\"btn btn-default btn-sm pull-right\" href=\"#\" data-bind=\"click: resetStats\">Reset</a>\n\n\t\t\t\t\t<ul data-bind=\"sortable: selectedStats\">\n\t\t\t\t\t\t<li data-bind=\"text: $root.getStatLabel($data)\"></li>\n\t\t\t\t\t</ul>\n\t\t\t\t</div>\n\n\t\t\t\t<div>\n\t\t\t\t\t<button class=\"btn btn-default\" data-bind=\"click: storeStats\">\n\t\t\t\t\t\tStore stats\n\t\t\t\t\t</button>\n\t\t\t\t\t<button class=\"btn btn-default\" data-bind=\"click: resetStoredStats, enable: hasStoredStats\">\n\t\t\t\t\t\tRemove stored stats\n\t\t\t\t\t</button>\n\t\t\t\t</div>\n\t\t\t</fieldset>\n\n\n\t\t\t<fieldset>\n\t\t\t\t<legend>Other</legend>\n\n\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t<label>\n\t\t\t\t\t\t<input type=\"checkbox\" data-bind=\"checked: showBestStats\"> Replace ranks with best stats\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\n\t\t\t\t<a class=\"btn btn-default\" href=\"#\" data-bind=\"click: resetAll\">Reset All</a>\n\t\t\t</fieldset>\n\t\t</div>\n\t</div>\n</div>");
 
 $(sidebarSelector).prepend($panel);
 
