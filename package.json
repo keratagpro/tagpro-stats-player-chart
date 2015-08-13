@@ -1,6 +1,6 @@
 {
   "name": "tagpro-stats-player-chart",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "Userscript for showing a chart of a player's tagpro stats.",
   "repository": {
     "type": "git",

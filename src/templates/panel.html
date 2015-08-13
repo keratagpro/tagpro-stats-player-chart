@@ -17,7 +17,6 @@
 
 		<div id="chartOptions" data-bind="css: { visible: showSettings }">
 			<a href="#" class="close" data-bind="click: toggleSettings">&times;</a>
-			<a href="#" class="reset-all" data-bind="click: resetAll">Reset All</a>
 
 			<fieldset>
 				<legend>Chart type</legend>
@@ -79,9 +78,13 @@
 			<fieldset>
 				<legend>Other</legend>
 
-				<label class="checkbox-inline">
-					<input type="checkbox" data-bind="checked: showBestStats"> Replace ranks with best stats
-				</label>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" data-bind="checked: showBestStats"> Replace ranks with best stats
+					</label>
+				</div>
+
+				<a class="btn btn-default" href="#" data-bind="click: resetAll">Reset All</a>
 			</fieldset>
 		</div>
 	</div>

@@ -9,7 +9,7 @@ var readFile = Promise.promisify(fs.readFile);
 var writeFile = Promise.promisify(fs.writeFile);
 var request = Promise.promisify(require('request'));
 
-const GAMES = 100; // 0, 10, 50, 100, 200, 500, 1000
+const GAMES = 1000; // 0, 10, 50, 100, 200, 500, 1000
 import { NEGATIVE_STATS } from '../src/lib/constants.js';
 
 gulp.task('update-stats', () => {
@@ -62,6 +62,7 @@ gulp.task('update-stats', () => {
 			queryStatsAsync(NEGATIVE_STATS.sort(), 'asc'),
 			(max, min) => {
 				return {
+					updatedAt: new Date().toISOString(),
 					statMaxValues: JSON.stringify(max, null, '\t'),
 					statMinValues: JSON.stringify(min, null, '\t')
 				};

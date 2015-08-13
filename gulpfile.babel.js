@@ -17,13 +17,13 @@ import project from './package.json';
 import './gulp/update-stats.js';
 
 gulp.task('bump', () => {
-	gulp.src('./package.json')
+	return gulp.src('./package.json')
 		.pipe(bump())
 		.pipe(gulp.dest('./'));
 });
 
 gulp.task('meta', () => {
-	gulp.src('./src/templates/meta.js.mustache')
+	return gulp.src('./src/templates/meta.js.mustache')
 		.pipe(mustache({
 			version: project.version
 		}))
@@ -37,7 +37,7 @@ gulp.task('build', ['meta'], () => {
 		paths: ['./src/']
 	}).bundle();
 
-	bundleStream
+	return bundleStream
 		.on('error', gutil.log.bind(gutil, 'Browserify Error'))
 		.pipe(source('./src/main.js'))
 		.pipe(addsrc.prepend('./dist/tagpro-stats-player-chart.meta.js'))
@@ -50,4 +50,4 @@ gulp.task('deploy', ['build'], () => {
 		.pipe(ghPages());
 });
 
-gulp.task('default', ['meta', 'build']);
+gulp.task('default', ['build']);

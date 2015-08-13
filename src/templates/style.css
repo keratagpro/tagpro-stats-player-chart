@@ -55,6 +55,7 @@
 	left: -350px;
 	transition: left 0.6s;
 	visibility: visible;
+	box-shadow: 0 0 5px 0 #ccc;
 }
 
 #chartOptions li {
@@ -64,12 +65,6 @@
 #chartOptions .close {
 	position: absolute;
 	top: 5px;
-	right: 5px;
-}
-
-#chartOptions .reset-all {
-	position: absolute;
-	bottom: 5px;
 	right: 5px;
 }
 
